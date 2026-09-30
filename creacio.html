@@ -1487,12 +1487,12 @@ function svgOwnCard(card){
   if(card.tipus==="ritme") return svgOwnRitme(card);
   if(card.tipus==="melodic") return svgOwnMelodic(card);
   const M = METRES[card.metre] || METRES.binari, bpb = M.bpb, sub = card.sub || (M.div===3?3:4), N = bpb*sub;
-  const W=300, H=200, x0=24, x1=W-24, y0=54, pw=(x1-x0)/bpb;
+  const W=300, H=200, x0=24, x1=W-24, y0=54, pw=(x1-x0)/bpb, sw=(x1-x0)/N;
   let g=`<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg"><rect x="1.5" y="1.5" width="${W-3}" height="${H-3}" rx="14" fill="#fff" stroke="#221F20" stroke-width="3"/>`;
   g+=`<text x="${x0}" y="24" font-family="Ubuntu,Arial,sans-serif" font-size="11" font-weight="700" fill="#6B6461">${(card.nom||"CARTA PRÒPIA").toUpperCase()}</text>`;
   g+=`<text x="${x1}" y="24" text-anchor="end" font-family="Ubuntu,Arial,sans-serif" font-size="11" font-weight="700" fill="#6B6461">${M.nom}</text>`;
-  for(let b=0;b<bpb;b++){ const cx=x0+b*pw+pw/2; g+=`<text x="${cx}" y="${y0-8}" text-anchor="middle" font-family="Lora,Georgia,serif" font-size="18" font-weight="700" fill="#221F20">${b+1}</text>`; }
-  const sw=(x1-x0)/N;
+  // el número va just sobre el primer tros del pols (on hi ha el cop del temps), no al mig del pols
+  for(let b=0;b<bpb;b++){ const cx=x0+(b*sub+0.5)*sw; g+=`<text x="${cx}" y="${y0-8}" text-anchor="middle" font-family="Lora,Georgia,serif" font-size="18" font-weight="700" fill="#221F20">${b+1}</text>`; }
   if(card.tipus==="bateria"){
     const rows=["crash","hh","oh","ride","sn","ghost","kk","ghostkk","t1","t2","t3"].filter(k=>(card[k]||[]).length);
     const rh=(H-22-y0)/Math.max(rows.length,3);
