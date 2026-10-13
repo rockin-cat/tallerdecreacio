@@ -1,0 +1,1047 @@
+<!doctype html>
+<html lang="ca">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Cartes Rockin</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="icon" href="https://rockin.cat/wp-content/uploads/2022/07/cropped-rockin-favicon-32x32.png">
+<link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<style>
+  :root{
+    --rk-groc:#FDBE10; --rk-tinta:#221F20; --rk-fons:#FAF8F3; --rk-suau:#F4F1EA; --rk-linia:#E2DDD3; --rk-gris:#6B6461;
+    --bg:var(--rk-fons);
+    --text:var(--rk-tinta);
+    --accent:var(--rk-groc);
+    --panel:#ffffff;
+    --border:rgba(0,0,0,.18);
+
+    /* ESTRUCTURADA: mida i aire */
+    --struct-card-h: 90px;
+    --struct-gap: 4px;
+
+    /* “carril” dins la columna: on volem snap-x */
+    --lane-x: 0.66; 
+  }
+
+  body{
+    font-family: 'Ubuntu', Helvetica, Arial, sans-serif;
+    background:var(--bg);
+    color:var(--text);
+    margin:0;
+    padding:16px;
+  }
+
+  h1{
+    margin:0 0 10px 0;
+    font-size:24px;
+    font-weight:650;
+    text-align:left;
+  }
+
+  .layout{
+    display:grid;
+    grid-template-columns: 360px 1fr;
+    gap:14px;
+    align-items:start;
+  }
+  @media (max-width: 980px){
+    .layout{ grid-template-columns: 1fr; }
+  }
+
+  /* ===== LEFT ===== */
+  .left{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+    box-shadow:0 10px 24px rgba(0,0,0,.06);
+    padding:12px;
+  }
+
+  .controls{
+    display:flex;
+    gap:8px;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-bottom:10px;
+  }
+
+  select, button, input{
+    font-size:14px;
+    padding:10px 12px;
+    border-radius:12px;
+  }
+
+  select{
+    border:1px solid rgba(0,0,0,.18);
+    background:white;
+    flex: 1 1 160px;
+  }
+
+  button{
+    background:var(--accent);
+    border:none;
+    font-weight:700;
+    cursor:pointer;
+  }
+  
+  .btn-pick { background: #007bff; color: white; }
+  .btn-pick:hover { background: #0056b3; }
+
+  .hint{
+    font-size:12px;
+    opacity:.65;
+    margin: 10px 0 0 0;
+    line-height:1.35;
+  }
+
+  /* ===== MAIN CARD ===== */
+  .cardStage{
+    width:100%;
+    height: 420px;
+    border-radius:16px;
+    overflow:hidden;
+    background:white;
+    border:1px solid rgba(0,0,0,.10);
+    box-shadow:0 10px 24px rgba(0,0,0,.10);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+  }
+
+  .cardStage.animate{
+    animation: deal .38s cubic-bezier(.2,.9,.2,1);
+  }
+
+  @keyframes deal{
+    0%{ transform:translateY(0); }
+    35%{ transform:translateY(-10px); }
+    70%{ transform:translateY(4px); }
+    100%{ transform:translateY(0); }
+  }
+
+  .cardImg{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    background:white;
+    user-select:none;
+  }
+
+  /* ===== RIGHT / BOARD ===== */
+  .boardWrap{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+    box-shadow:0 10px 24px rgba(0,0,0,.06);
+    padding:12px;
+  }
+
+  .boardTop{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin: 0 0 10px 0;
+  }
+
+  .boardTopLeft{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+
+  .boardTitle{ font-weight:650; }
+
+  .zoomBar{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    padding:4px 6px;
+    border:1px solid rgba(0,0,0,.12);
+    border-radius:12px;
+    background:white;
+  }
+
+  .zoomBtn{
+    background:#fff;
+    border:1px solid rgba(0,0,0,.15);
+    padding:6px 10px;
+    border-radius:10px;
+    font-weight:700;
+    cursor:pointer;
+  }
+
+  .zoomPct{
+    font-size:12px;
+    opacity:.75;
+    width:46px;
+    text-align:center;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .modeSelect{
+    border:1px solid rgba(0,0,0,.12);
+    background:white;
+    border-radius:12px;
+    padding:8px 10px;
+    font-size:13px;
+  }
+
+  .boardViewport{
+    width:100%;
+    height: 76vh;
+    min-height: 520px;
+    overflow:auto;
+    border:2px dashed rgba(0,0,0,.20);
+    border-radius:14px;
+    background:white;
+    position:relative;
+  }
+
+  /* ===== FREE MODE ===== */
+  .freeCanvas{
+    position:relative;
+    width: 2600px;
+    height: 1600px;
+    transform-origin: 0 0;
+    background:
+      radial-gradient(circle at 1px 1px, rgba(0,0,0,.06) 1px, transparent 0) 0 0/24px 24px;
+  }
+
+  .freeBase{
+    position:absolute;
+    inset:0;
+    z-index: 1;
+    pointer-events:none;
+  }
+  .freeOverlay{
+    position:absolute;
+    inset:0;
+    z-index: 5;
+    pointer-events:auto;
+  }
+
+  /* ===== THUMBS ===== */
+  .thumb{
+    position:absolute;
+    --w: 150px;
+    width: var(--w);
+    height:auto;
+    background:transparent;
+    cursor:grab;
+    user-select:none;
+    touch-action:none;
+  }
+
+  .thumb img{
+    width:100%;
+    height:auto;
+    object-fit:contain;
+    pointer-events:none;
+    display:block;
+  }
+
+  .handle{
+    position:absolute;
+    right:-6px;
+    bottom:-6px;
+    width:14px;
+    height:14px;
+    border-radius:999px;
+    background: rgba(0,0,0,.55);
+    border: 2px solid rgba(255,255,255,.9);
+    cursor: nwse-resize;
+    touch-action:none;
+
+    opacity:0;
+    transform: scale(0.85);
+    transition: opacity .12s ease, transform .12s ease;
+    pointer-events:none;
+  }
+
+  .thumb:hover .handle,
+  .thumb.is-active .handle{
+    opacity:1;
+    transform: scale(1);
+    pointer-events:auto;
+  }
+
+  /* ===== STRUCTURED MODE ===== */
+  .structuredWrap{
+    transform-origin: 0 0;
+    width: 100%;
+    height: 100%;
+    padding: 6px;
+    box-sizing: border-box;
+    position:relative;
+  }
+
+  .structuredTop{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-bottom:8px;
+    flex-wrap:wrap;
+  }
+
+  .structuredTop label{
+    font-size:12px;
+    opacity:.85;
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+
+  .numInput{
+    width:88px;
+    border:1px solid rgba(0,0,0,.18);
+    background:white;
+    padding:7px 10px;
+    border-radius:12px;
+  }
+
+  .miniBtn{
+    background:#fff;
+    border:1px solid rgba(0,0,0,.15);
+    border-radius:12px;
+    padding:7px 10px;
+    cursor:pointer;
+    font-weight:700;
+    font-size:13px;
+  }
+
+  .matrix{
+    display:grid;
+    gap: var(--struct-gap);
+    align-items:stretch;
+    width:100%;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 170px));
+    justify-content: start;
+  }
+
+  .col{
+    border:1px solid rgba(0,0,0,.06);
+    border-radius:12px;
+    background: rgba(255,255,255,.95);
+    overflow:hidden;
+
+    display:grid;
+    grid-template-rows: repeat(5, 1fr);
+    gap: var(--struct-gap);
+    padding: 4px;
+    min-width:0;
+  }
+
+  .cardSlot{
+    width:100%;
+    height: var(--struct-card-h);
+    border-radius:10px;
+    background: rgba(0,0,0,.03);
+
+    display:flex;
+    align-items:center;
+    justify-content:flex-start;
+
+    padding-left:4px;
+    overflow:hidden;
+  }
+
+  .cardSlot.empty{
+    background: rgba(0,0,0,.015);
+  }
+
+  .cardSlot img{
+    height:100%;
+    width:auto;
+    object-fit:contain;
+    display:block;
+    flex-shrink:0;
+  }
+
+  .structuredBase{
+    position:relative;
+    z-index: 1;
+  }
+
+  .structuredOverlay{
+    position:absolute;
+    inset: 0;
+    z-index: 5;
+    pointer-events:none;
+  }
+  .structuredOverlay .thumb{
+    pointer-events:auto;
+  }
+
+  .hidden{ display:none !important; }
+
+  .footer-license {
+    grid-column: 1 / -1; 
+    margin-top: 40px;
+    padding: 20px;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-size: 13px;
+    color: #666;
+  }
+
+  /* ===== MODAL ===== */
+  .modal-overlay { 
+      display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
+      background: rgba(0,0,0,0.8); z-index: 1000; align-items: center; justify-content: center; 
+  }
+  .modal-contingut { 
+      background: white; padding: 25px; border-radius: 10px; width: 95%; max-width: 900px; 
+      max-height: 90vh; overflow-y: auto; text-align: center; 
+  }
+  
+  .modal-graella { 
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); 
+      gap: 15px; margin-top: 20px; 
+  }
+  
+  .carta-opcio { 
+      position: relative; border: 2px solid #ddd; padding: 8px; cursor: pointer; 
+      border-radius: 5px; background: #f9f9f9; transition: all 0.2s; 
+  }
+  .carta-opcio:hover { border-color: var(--accent); transform: scale(1.02); }
+  .carta-opcio img { width: 100%; height: 180px; object-fit: contain; background: white; border-radius: 3px; }
+  
+  .carta-opcio.seleccionat { border-color: #28a745; background: #e8f5e9; }
+</style>
+</head>
+
+<body>
+
+<style>
+  body{ padding-top:84px; }
+  .topbar{ position:fixed; top:0; left:0; right:0; height:68px; z-index:1500; background:var(--rk-groc); color:var(--rk-tinta); display:flex; align-items:center; gap:16px; padding:0 20px; }
+  .topbar .brand{ display:flex; align-items:center; gap:14px; text-decoration:none; color:inherit; }
+  .topbar .brand img{ height:44px; width:auto; display:block; }
+  .topbar .brand span{ font-weight:500; font-size:14px; text-transform:uppercase; letter-spacing:.08em; opacity:.8; }
+  .topbar nav{ margin-left:auto; }
+  .topbar nav a{ font-size:13px; font-weight:500; color:var(--rk-groc); background:var(--rk-tinta); text-decoration:none; padding:8px 14px; border-radius:2px; letter-spacing:.03em; }
+  .topbar nav a:hover{ filter:brightness(1.15); }
+  .left, .boardWrap, .modal-contingut{ border-radius:4px !important; border-color:var(--rk-linia) !important; box-shadow:none !important; }
+  select, input, .modeSelect, .numInput{ font-family:inherit; border-radius:2px !important; border-color:var(--rk-linia) !important; }
+  button{ font-family:inherit; border-radius:2px !important; }
+  #btnNew{ background:var(--rk-tinta); color:var(--rk-groc); }
+  .btn-pick{ background:var(--rk-groc) !important; color:var(--rk-tinta) !important; }
+  .zoomBtn, .miniBtn{ border-color:var(--rk-linia) !important; }
+  .boardTitle, .modal-contingut h2{ font-family:'Lora', Georgia, serif; font-weight:700; }
+  .footer-license a{ color:#1f6a58 !important; }
+  .cardStage, .boardViewport{ border-radius:4px !important; }
+</style>
+<header class="topbar">
+  <a class="brand" href="https://rockin.cat" target="_blank" rel="noopener"><img src="https://rockin.cat/wp-content/uploads/2022/07/rockin-logo.svg" alt="Rockin" onerror="this.onerror=null;this.src='marca/rockin-logo-fosc.png'"><span>Cartes Rockin</span></a>
+  <nav><a href="index.html">🎼 Creació: compon i escolta →</a></nav>
+</header>
+
+<div class="layout">
+
+  <div class="left">
+    <div class="controls">
+      <select id="deck"></select>
+      <button id="btnNew" type="button" title="Tria carta a l'atzar">🎲 Atzar</button>
+      <button id="btnPick" type="button" class="btn-pick" title="Tria carta manualment">🔍 Escull</button>
+    </div>
+    
+    <div style="margin-bottom:10px;">
+        <button id="btnClear" type="button" style="width:100%; background: #dc3545; color:white;">🗑️ Neteja pissarra</button>
+    </div>
+
+    <div class="cardStage" id="cardStage">
+      <img id="imgTop" class="cardImg" draggable="true" alt="Carta actual">
+    </div>
+
+    <p class="hint">
+      <b>Enter</b> = nova carta · <b>Arrossega</b> la carta a la pissarra.
+      (Doble clic a una carta de pissarra = elimina)
+    </p>
+  </div>
+
+  <div class="boardWrap">
+
+    <div class="boardTop">
+      <div class="boardTopLeft">
+        <div class="boardTitle">Pissarra</div>
+
+        <select id="mode" class="modeSelect" aria-label="Mode pissarra">
+          <option value="free">Pissarra lliure</option>
+          <option value="structured">Pissarra estructurada</option>
+        </select>
+
+        <div class="zoomBar" aria-label="Zoom pissarra">
+          <button class="zoomBtn" id="zoomOut" type="button">−</button>
+          <div class="zoomPct" id="zoomPct">100%</div>
+          <button class="zoomBtn" id="zoomIn" type="button">+</button>
+        </div>
+
+        <button class="zoomBtn" id="btnExport" type="button">📸 Descarrega</button>
+      </div>
+
+      <div style="font-size:12px;opacity:.65;">scroll X/Y</div>
+    </div>
+
+    <div class="boardViewport" id="boardViewport">
+
+      <div class="freeCanvas" id="freeCanvas">
+        <div class="freeBase" id="freeBase"></div>
+        <div class="freeOverlay" id="freeOverlay"></div>
+      </div>
+
+      <div class="structuredWrap hidden" id="structuredWrap">
+        <div class="structuredTop">
+          <label>
+            <b>Columnes</b>
+            <input id="colInput" class="numInput" type="number" min="1" max="10" value="5" />
+          </label>
+
+          <button class="miniBtn" id="btnProposal" type="button">Fes proposta aleatòria</button>
+
+          <span style="font-size:12px;opacity:.65;">(mínim 1 carta per columna)</span>
+        </div>
+
+        <div class="structuredBase">
+          <div class="matrix" id="matrix"></div>
+        </div>
+
+        <div class="structuredOverlay" id="structuredOverlay"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <div class="footer-license no-print">
+      <p>Aquesta eina està sota una llicència 
+         <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ca" target="_blank" style="color: #007bff; text-decoration: none;">
+         Creative Commons Reconeixement-NoComercial-CompartirIgual 4.0 Internacional
+         </a>
+      </p>
+      <img src="https://mirrors.creativecommons.org/presskit/buttons/88x31/png/by-nc-sa.png" alt="CC BY-NC-SA" style="height: 31px; margin-top: 10px;">
+  </div>
+
+</div>
+
+<div id="modalCartes" class="modal-overlay" onclick="tancarSiFora(event, 'modalCartes')">
+    <div class="modal-contingut">
+        <h2 style="margin-top:0;">🔍 Tria una carta</h2>
+        <p style="font-size: 14px; color: #666; margin-top: -10px;">Fes clic a la carta que vulguis utilitzar per posar-la a l'aparador.</p>
+        <div class="modal-graella" id="galeria-cartes"></div>
+        <button onclick="tancarModal('modalCartes')" style="margin-top:30px; background:#666; color:white; padding:10px 20px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Tancar finestra</button>
+    </div>
+</div>
+
+<script>
+/* ===== Config estructurada ===== */
+const ROWS = ["bateria","teclat","veu","baix","guitarra"]
+const PRESENCE_PROB = 0.55
+
+/* ===== Estat ===== */
+let MANIFEST = {}
+let barallaActual = []
+let barallaRestant = []
+let currentPath = null
+
+let zoom = 1.0
+const ZOOM_MIN = 0.5
+const ZOOM_MAX = 1.4
+const ZOOM_STEP = 0.1
+
+function shuffle(a){
+  for(let i=a.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1))
+    ;[a[i],a[j]]=[a[j],a[i]]
+  }
+  return a
+}
+function clamp(v,min,max){ return Math.max(min, Math.min(max, v)) }
+
+function normalizeKey(s){
+  return (s || "")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .toLowerCase()
+}
+
+function getMode(){
+  return document.getElementById("mode").value
+}
+
+async function init(){
+  try {
+      const resp = await fetch("manifest.json");
+      MANIFEST = await resp.json();
+  } catch(e) {
+      console.error(e);
+      alert("Error: No s'ha pogut carregar el 'manifest.json'. Comprova que l'arxiu existeix i que estàs executant un servidor local, o que GitHub Pages ha acabat de desplegar els canvis.");
+      return;
+  }
+
+  const select = document.getElementById("deck")
+  Object.keys(MANIFEST).forEach(b=>{
+    const opt=document.createElement("option")
+    opt.value=b
+    opt.textContent=b
+    select.appendChild(opt)
+  })
+
+  select.addEventListener("change", carregarBaralla)
+
+  document.getElementById("btnNew").addEventListener("click", novaCarta)
+  document.getElementById("btnPick").addEventListener("click", obrirModalCartes)
+  document.getElementById("btnClear").addEventListener("click", clearBoard)
+  document.getElementById("mode").addEventListener("change", applyMode)
+
+  document.addEventListener("keydown", e=>{
+    if(e.key==="Enter" && document.getElementById("modalCartes").style.display !== "flex") novaCarta()
+  })
+
+  document.getElementById("zoomIn").addEventListener("click", ()=> setZoom(zoom + ZOOM_STEP))
+  document.getElementById("zoomOut").addEventListener("click", ()=> setZoom(zoom - ZOOM_STEP))
+  updateZoomUI()
+
+  document.getElementById("btnProposal").addEventListener("click", buildProposal)
+  document.getElementById("btnExport").addEventListener("click", exportPNG)
+
+  // drag from main card
+  const imgTop = document.getElementById("imgTop")
+  imgTop.addEventListener("dragstart", (e)=>{
+    if(!currentPath) return
+    e.dataTransfer.setData("text/plain", currentPath)
+    e.dataTransfer.effectAllowed="copy"
+  })
+
+  // drop in free overlay
+  const freeOverlay = document.getElementById("freeOverlay")
+  freeOverlay.addEventListener("dragover", e=>e.preventDefault())
+  freeOverlay.addEventListener("drop", e=>{
+    e.preventDefault()
+    if(getMode()!=="free") return
+    const path = e.dataTransfer.getData("text/plain")
+    if(!path) return
+
+    const freeCanvas = document.getElementById("freeCanvas")
+    const rect = freeCanvas.getBoundingClientRect()
+    const x = (e.clientX - rect.left) / zoom
+    const y = (e.clientY - rect.top) / zoom
+    addThumbToContainer(freeOverlay, path, x, y, "150px")
+  })
+
+  // drop structuredWrap (robust) + magnetisme columnes
+  const structuredWrap = document.getElementById("structuredWrap")
+  structuredWrap.addEventListener("dragover", e=>{
+    if(getMode()!=="structured") return
+    e.preventDefault()
+  })
+  structuredWrap.addEventListener("drop", e=>{
+    e.preventDefault()
+    if(getMode()!=="structured") return
+    const path = e.dataTransfer.getData("text/plain")
+    if(!path) return
+
+    const rect = structuredWrap.getBoundingClientRect()
+    const xRaw = (e.clientX - rect.left) / zoom
+    const y = (e.clientY - rect.top) / zoom
+
+    const snappedX = snapXToNearestColumn(xRaw)
+    addThumbToContainer(document.getElementById("structuredOverlay"), path, snappedX, y, "140px")
+  })
+
+  carregarBaralla()
+  setZoom(1.0)
+  applyMode()
+  buildProposal()
+}
+
+function setZoom(z){
+  zoom = clamp(z, ZOOM_MIN, ZOOM_MAX)
+  updateZoomUI()
+
+  if(getMode()==="free"){
+    document.getElementById("freeCanvas").style.transform = `scale(${zoom})`
+  }else{
+    document.getElementById("structuredWrap").style.transform = `scale(${zoom})`
+  }
+}
+
+function updateZoomUI(){
+  document.getElementById("zoomPct").textContent = Math.round(zoom*100) + "%"
+}
+
+function applyMode(){
+  const mode = getMode()
+  const freeCanvas = document.getElementById("freeCanvas")
+  const structured = document.getElementById("structuredWrap")
+
+  if(mode==="free"){
+    structured.classList.add("hidden")
+    freeCanvas.classList.remove("hidden")
+    freeCanvas.style.transformOrigin="0 0"
+    freeCanvas.style.transform = `scale(${zoom})`
+  }else{
+    freeCanvas.classList.add("hidden")
+    structured.classList.remove("hidden")
+    structured.style.transformOrigin="0 0"
+    structured.style.transform = `scale(${zoom})`
+  }
+}
+
+/* ===== Carta gran i Modal ===== */
+function carregarBaralla(){
+  const deck = document.getElementById("deck").value
+  if(!deck || !MANIFEST[deck]) return;
+  barallaActual = [...MANIFEST[deck]]
+  barallaRestant = shuffle([...barallaActual])
+  novaCarta()
+}
+
+function setMainImg(path){
+  const img=document.getElementById("imgTop")
+  const url=new URL(path, window.location.href)
+  
+  // Evitem trencament si s'obra en local amb l'arxiu directament (file:///)
+  if (window.location.protocol !== 'file:') {
+      url.searchParams.set("t", Date.now())
+  }
+  
+  img.src=url.toString()
+  currentPath = path
+  
+  // Animació visual
+  const stage=document.getElementById("cardStage")
+  stage.classList.remove("animate")
+  void stage.offsetWidth
+  stage.classList.add("animate")
+}
+
+function novaCarta(){
+  if(!barallaActual || barallaActual.length === 0) return;
+  if(barallaRestant.length===0) barallaRestant = shuffle([...barallaActual])
+  const path = barallaRestant.pop()
+  setMainImg(path)
+}
+
+function obrirModalCartes() {
+    const cont = document.getElementById('galeria-cartes')
+    cont.innerHTML = ''
+    
+    if(!barallaActual || barallaActual.length === 0) {
+        cont.innerHTML = "<p>No hi ha cartes en aquesta baralla.</p>";
+    }
+    
+    // Mostrem totes les cartes de la baralla seleccionada actualment
+    barallaActual.forEach(path => {
+        const d = document.createElement('div')
+        d.className = 'carta-opcio'
+        
+        // Nom net per mostrar a sota de l'imatge
+        const nomNet = path.split('/').pop().replace('.png', '').replace('.jpg', '')
+        
+        const url=new URL(path, window.location.href)
+        if (window.location.protocol !== 'file:') {
+            url.searchParams.set("t", Date.now())
+        }
+        
+        d.innerHTML = `<img src="${url.toString()}" alt="${nomNet}"><div style="margin-top:5px; font-size:12px;">${nomNet}</div>`
+        
+        if(path === currentPath) d.classList.add('seleccionat')
+        
+        d.onclick = () => {
+            setMainImg(path)
+            tancarModal('modalCartes')
+        }
+        
+        cont.appendChild(d)
+    })
+    
+    document.getElementById('modalCartes').style.display = 'flex'
+}
+
+function tancarModal(id) { document.getElementById(id).style.display = 'none'; }
+function tancarSiFora(e, id) { if (e.target.id === id) tancarModal(id); }
+
+/* ===== Thumbs ===== */
+function createThumb(path, widthCss){
+  const t=document.createElement("div")
+  t.className="thumb"
+  t.style.setProperty("--w", widthCss || "150px")
+
+  const img=document.createElement("img")
+  const url=new URL(path, window.location.href)
+  if (window.location.protocol !== 'file:') {
+      url.searchParams.set("t", Date.now())
+  }
+  img.src=url.toString()
+
+  const handle=document.createElement("div")
+  handle.className="handle"
+  handle.title="Arrossega per canviar la mida"
+
+  t.appendChild(img)
+  t.appendChild(handle)
+
+  // doble clic = eliminar
+  t.addEventListener("dblclick", ()=>t.remove())
+
+  makeMovable(t)
+  makeResizable(t, handle)
+
+  // magnetisme mentre mous (només en structured)
+  t.addEventListener("pointerup", ()=>{
+    if(getMode()!=="structured") return
+    // només snap si està dins structuredOverlay
+    const parent = t.parentElement
+    if(!parent || parent.id!=="structuredOverlay") return
+
+    const x = parseFloat(t.style.left||"0")
+    const y = parseFloat(t.style.top||"0")
+    const w = parseFloat(getComputedStyle(t).getPropertyValue("--w")) || 140
+
+    // Snap del centre a columna
+    const centerX = x + (w/2)
+    const snappedCenter = snapXToNearestColumn(centerX)
+    const newLeft = snappedCenter - (w/2)
+
+    t.style.left = newLeft + "px"
+    t.style.top  = y + "px"
+  })
+
+  return t
+}
+
+function addThumbToContainer(container, path, x, y, widthCss){
+  const t = createThumb(path, widthCss)
+  const w = parseFloat(widthCss) || 150
+  t.style.left = (x - (w/2)) + "px"
+  t.style.top  = (y - (w/2)) + "px"
+  container.appendChild(t)
+}
+
+function makeMovable(el){
+  let startX=0,startY=0,origL=0,origT=0,dragging=false
+
+  el.addEventListener("pointerdown",(e)=>{
+    if(e.target && e.target.classList.contains("handle")) return
+    dragging=true
+    el.classList.add("is-active")
+    el.setPointerCapture(e.pointerId)
+    el.style.zIndex=String(Date.now())
+    startX=e.clientX; startY=e.clientY
+    origL=parseFloat(el.style.left||"0")
+    origT=parseFloat(el.style.top||"0")
+  })
+
+  el.addEventListener("pointermove",(e)=>{
+    if(!dragging) return
+    const dx=(e.clientX-startX)/zoom
+    const dy=(e.clientY-startY)/zoom
+    el.style.left=(origL+dx)+"px"
+    el.style.top=(origT+dy)+"px"
+  })
+
+  el.addEventListener("pointerup",(e)=>{
+    dragging=false
+    el.classList.remove("is-active")
+    try{el.releasePointerCapture(e.pointerId)}catch(_){}
+  })
+  el.addEventListener("pointercancel",()=>{
+    dragging=false
+    el.classList.remove("is-active")
+  })
+}
+
+function makeResizable(el, handle){
+  let startX=0,startW=150,resizing=false
+
+  handle.addEventListener("pointerdown",(e)=>{
+    resizing=true
+    el.classList.add("is-active")
+    handle.setPointerCapture(e.pointerId)
+    el.style.zIndex=String(Date.now())
+    startX=e.clientX
+    startW=parseFloat(getComputedStyle(el).getPropertyValue("--w"))||150
+    e.preventDefault(); e.stopPropagation()
+  })
+
+  handle.addEventListener("pointermove",(e)=>{
+    if(!resizing) return
+    const dx=(e.clientX-startX)/zoom
+    const newW=clamp(startW+dx,60,520)
+    el.style.setProperty("--w",newW+"px")
+  })
+
+  handle.addEventListener("pointerup",(e)=>{
+    resizing=false
+    el.classList.remove("is-active")
+    try{handle.releasePointerCapture(e.pointerId)}catch(_){}
+  })
+  handle.addEventListener("pointercancel",()=>{
+    resizing=false
+    el.classList.remove("is-active")
+  })
+}
+
+/* ===== Magnetisme: snap X a la columna més propera ===== */
+function snapXToNearestColumn(xInStructured){
+  const structuredWrap = document.getElementById("structuredWrap")
+  const matrix = document.getElementById("matrix")
+  const cols = Array.from(matrix.querySelectorAll(".col"))
+  if(cols.length===0) return xInStructured
+
+  const wrapRect = structuredWrap.getBoundingClientRect()
+
+  const xScreen = wrapRect.left + (xInStructured * zoom)
+
+  let best = null
+  let bestDist = Infinity
+
+  for(const col of cols){
+    const r = col.getBoundingClientRect()
+    const center = r.left + r.width/2
+    const dist = Math.abs(center - xScreen)
+    if(dist < bestDist){
+      bestDist = dist
+      best = r
+    }
+  }
+  if(!best) return xInStructured
+
+  const laneRatio = parseFloat(getComputedStyle(document.documentElement).getPropertyValue("--lane-x")) || 0.66
+  const targetScreenX = best.left + (best.width * laneRatio)
+
+  const targetLocal = (targetScreenX - wrapRect.left) / zoom
+
+  const leftLocal = (best.left - wrapRect.left) / zoom
+  const rightLocal = (best.right - wrapRect.left) / zoom
+  const margin = 10
+
+  return clamp(targetLocal, leftLocal + margin, rightLocal - margin)
+}
+
+/* ===== Structured proposal ===== */
+function findCreationDeckKey(){
+  const keys = Object.keys(MANIFEST)
+  return keys.find(k => normalizeKey(k).includes("creacio")) || null
+}
+
+function buildCreationCardMap(){
+  const key = findCreationDeckKey()
+  if(!key) return { _error: true }
+
+  const list = MANIFEST[key] || []
+  const normList = list.map(p => ({ path:p, norm: normalizeKey(p) }))
+
+  const map = {}
+  for(const rowKey of ROWS){
+    const hit = normList.find(o => o.norm.includes(rowKey))
+    if(hit) map[rowKey] = hit.path
+  }
+  return map
+}
+
+function buildProposal(){
+  const colInput = document.getElementById("colInput")
+  let cols = Number(colInput.value || 5)
+  cols = clamp(cols, 1, 10)
+  colInput.value = cols
+
+  const matrix = document.getElementById("matrix")
+  matrix.innerHTML = ""
+
+  const cardMap = buildCreationCardMap()
+  if(cardMap._error) return
+
+  for(let c=0;c<cols;c++){
+    const col = document.createElement("div")
+    col.className = "col"
+
+    let chosen = []
+    for(let r=0;r<ROWS.length;r++){
+      if(Math.random() < PRESENCE_PROB) chosen.push(r)
+    }
+    if(chosen.length === 0){
+      chosen = [Math.floor(Math.random()*ROWS.length)]
+    }
+
+    for(let r=0;r<ROWS.length;r++){
+      const rowKey = ROWS[r]
+      const slot = document.createElement("div")
+      slot.className = "cardSlot"
+
+      const show = chosen.includes(r) && !!cardMap[rowKey]
+      if(show){
+        const img = document.createElement("img")
+        const url = new URL(cardMap[rowKey], window.location.href)
+        if (window.location.protocol !== 'file:') {
+            url.searchParams.set("t", Date.now())
+        }
+        img.src = url.toString()
+        img.alt = rowKey
+        slot.appendChild(img)
+      }else{
+        slot.classList.add("empty")
+      }
+
+      col.appendChild(slot)
+    }
+    matrix.appendChild(col)
+  }
+}
+
+/* ===== Export PNG ===== */
+async function exportPNG(){
+  const mode = getMode()
+  const targetId = (mode === "free") ? "freeCanvas" : "structuredWrap"
+  const target = document.getElementById(targetId)
+
+  const stamp = new Date().toISOString().slice(0,19).replace(/[:T]/g,"-")
+  const filename = `pissarra-rockin-${mode}-${stamp}.png`
+
+  const canvas = await html2canvas(target, {
+    backgroundColor: "#ffffff",
+    scale: 2,
+    useCORS: true,
+    scrollX: 0,
+    scrollY: 0,
+    onclone: (doc) => {
+      const cloned = doc.getElementById(targetId)
+      if(cloned){
+        cloned.style.transform = "none"
+        cloned.style.transformOrigin = "0 0"
+      }
+      const free = doc.getElementById("freeCanvas")
+      if(free) free.style.transform = "none"
+      const struct = doc.getElementById("structuredWrap")
+      if(struct) struct.style.transform = "none"
+    }
+  })
+
+  const link = document.createElement("a")
+  link.download = filename
+  link.href = canvas.toDataURL("image/png")
+  link.click()
+}
+
+/* ===== Clear ===== */
+function clearBoard(){
+  if(getMode()==="free"){
+    document.getElementById("freeOverlay").innerHTML = ""
+  }else{
+    document.getElementById("matrix").innerHTML = ""
+    document.getElementById("structuredOverlay").innerHTML = ""
+  }
+}
+
+init()
+</script>
+
+</body>
+</html>
