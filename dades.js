@@ -60,7 +60,7 @@ window.ROCKIN_DADES = (function () {
     });
     return notes;
   }
-  const R = (id, deck, str) => ({ id, img: `imatges/${deck}/${id}.png`, notes: ritme(str), text: str });
+  const R = (id, deck, str) => ({ id, img: `imatges/${deck}/${id}.jpg`, notes: ritme(str), text: str });
 
   // ------------------------------ BINARI (4/4) ------------------------------
   const BINARI = [
@@ -166,7 +166,7 @@ window.ROCKIN_DADES = (function () {
   // és una llista d'alçades relatives (0 = la més greu). Les frases es reparteixen
   // per igual dins del compàs, i cada alçada es converteix en una nota de l'acord
   // (0 = fonamental, 1 = tercera, 2 = quinta, 3 = fonamental aguda, …).
-  const M = (n, frases) => ({ id: `pm${n}`, img: `imatges/Melodic/pm${n}.png`, contour: frases });
+  const M = (n, frases) => ({ id: `pm${n}`, img: `imatges/Melodic/pm${n}.jpg`, contour: frases });
   // Llegit automàticament de les imatges: cada punt és una nota, cada traç és una frase.
   const MELODIC = [
     M(1, [[0, 1, 0, 1, 0]]),
