@@ -8,7 +8,7 @@
 <link rel="icon" href="https://rockin.cat/wp-content/uploads/2022/07/cropped-rockin-favicon-32x32.png">
 <link href="https://fonts.googleapis.com/css2?family=Lora:wght@600;700&family=Ubuntu:wght@400;500;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-<script src="dades.js?v=39"></script>
+<script src="dades.js?v=41"></script>
 <style>
   :root{
     /* Paleta Rockin (dels materials impresos) */
@@ -276,6 +276,121 @@
   .footer img{ height:34px; display:block; margin:0 auto 8px; }
   .footer a{ color:var(--rk-menta-fosc); }
   @media (max-width:900px){ body{ overflow:auto; display:block; } .stage .gridWrap{ overflow:auto; max-height:none; } .transport{ position:sticky; bottom:0; } .transport .pos{ min-width:0; } .pop{ left:8px; right:8px; transform:none; width:auto; } }
+
+  /* =====================================================================
+     TEMA ESTUDI: superfície de treball fosca, marca groga, cartes com a objectes
+     ===================================================================== */
+  :root{
+    /* versió clara: paper i crema (colors de marca), línies neutres, groc només per a l'estat actiu */
+    --st-bg:#EFEBE3; --st-panel:#FFFFFF; --st-panel2:#F4F1EA; --st-line:#E2DDD3; --st-line2:#CDC6BA;
+    --st-text:#221F20; --st-muted:#6B6461; --st-cell:#F6F3EC; --st-cell-empty:#FBFAF7; --st-hover:#ECE7DD;
+    --st-focus:var(--rk-groc);
+  }
+  body{ background:var(--st-bg); color:var(--st-text); }
+  .ico{ width:15px; height:15px; display:inline-block; vertical-align:-3px; flex:0 0 auto; }
+  button{ display:inline-flex; align-items:center; justify-content:center; gap:7px; border-radius:3px; font-weight:600; letter-spacing:.01em; }
+  .transport .play{ display:grid; place-items:center; padding:0 0 0 3px; }
+  .rowHead{ justify-content:center; padding-right:26px; }
+  .rowHead img{ max-width:calc(100% - 8px); object-fit:contain; }
+  button.ghost{ background:transparent; border:1px solid var(--st-line2); color:var(--st-text); font-weight:500; }
+  button.ghost:hover{ background:var(--st-hover); filter:none; }
+  button.danger{ background:transparent; border:1px solid #d9534f; color:#c0392b; }
+  .caret{ font-size:10px; opacity:.6; margin-left:4px; }
+  /* barra de marca: igual, però els controls més nets */
+  .topbar{ box-shadow:0 1px 0 rgba(0,0,0,.08); }
+  .setbar label.f{ color:rgba(34,31,32,.7); }
+  .setbar select, .setbar input[type=text]{ background:rgba(255,255,255,.92); border-radius:3px; }
+  .setbar .seg{ background:rgba(34,31,32,.08); border-radius:3px; }
+  .setbar .seg button{ border-radius:3px; }
+  .topbar nav a{ border-radius:3px; display:inline-flex; align-items:center; gap:7px; }
+  .colHead .acords .chord-chip i{ display:none; }
+  .colHead .acords .chord-chip{ font-size:9px; padding:2px 3px 1px; min-width:0; border-radius:3px; line-height:1; }
+  .colHead .acords{ gap:2px; padding:2px; overflow:hidden; }
+  .transport input[type=checkbox]{ accent-color:var(--rk-groc); }
+  .rowHead .nm{ background:var(--st-panel2); }
+  .topbar nav .icon, .topbar #btnColors{ background:var(--rk-tinta); color:var(--rk-groc); border-radius:3px; width:36px; height:36px; }
+  /* escenari */
+  .stage{ padding:12px 16px 0; }
+  .stage .toolbar{ gap:8px; }
+  .loadinfo{ color:var(--st-muted); }
+  .gridWrap{ background:var(--st-panel); border:1px solid var(--st-line); border-radius:6px; padding:12px; }
+  .grid{ gap:5px; }
+  .corner{ color:var(--st-muted); font-size:10px; text-transform:uppercase; letter-spacing:.12em; align-items:flex-end; justify-content:flex-start; padding:0 0 8px 6px; }
+  .rowHead{ background:var(--st-panel2); border-radius:5px; }
+  .rowHead img{ border-radius:5px; box-shadow:0 1px 4px rgba(0,0,0,.18); }
+  .rowHead .nm{ color:var(--st-muted); }
+  .rowHead .ms button, .strip .ms2 button{ width:22px; height:20px; border-radius:3px; background:var(--st-panel); border:1px solid var(--st-line2); color:var(--st-muted); font-size:10px; }
+  .rowHead .ms button.on.mute, .strip .ms2 button.on.mute{ background:#d9534f; color:#fff; border-color:transparent; }
+  .rowHead .ms button.on.solo, .strip .ms2 button.on.solo{ background:var(--rk-groc); color:var(--rk-tinta); border-color:transparent; }
+  .colHead{ background:var(--st-panel2); border-radius:5px; padding:8px 8px 6px; gap:5px; }
+  .colHead select.sec{ background:transparent; color:var(--st-text); font-size:14px; padding:2px 0; text-transform:uppercase; letter-spacing:.04em; border-bottom:1px solid var(--st-line2); border-radius:0; }
+  .colHead .sub select{ background:var(--st-panel); color:var(--st-text); border:1px solid var(--st-line2); border-radius:3px; }
+  .colHead .acords{ background:var(--st-panel); border:1px solid var(--st-line2); border-radius:3px; }
+  .colHead .acords.own{ border-color:var(--rk-groc); }
+  .colHead .bar{ background:rgba(0,0,0,.10); height:5px; }
+  .colHead .bar.on{ outline:2px solid var(--rk-groc); }
+  .colHead .jump, .colHead .tools button{ background:var(--st-panel2); border:1px solid var(--st-line2); color:var(--st-text); }
+  .colHead .jump:hover{ background:var(--rk-groc); color:var(--rk-tinta); }
+  .col.playing .colHead{ outline:2px solid var(--rk-groc); }
+  .cell{ background:var(--st-cell); border-radius:5px; border:1px solid transparent; }
+  .cell:hover{ border-color:var(--rk-groc); }
+  .cell.empty{ background:var(--st-cell-empty); border:1px dashed var(--st-line2); }
+  .cell.empty::after{ color:var(--st-line2); font-size:22px; }
+  .cell img, .cell .ccard{ filter:drop-shadow(0 1px 3px rgba(0,0,0,.16)); }
+  .cell .lbl{ background:rgba(255,255,255,.9); color:var(--st-text); }
+  .cell .x{ background:var(--st-panel); border:1px solid var(--st-line2); color:var(--st-text); }
+  .cell .now{ border-color:var(--rk-groc); border-radius:5px; }
+  .addCol{ background:transparent; border:1px dashed var(--st-line2); color:var(--st-muted); border-radius:5px; }
+  .addCol:hover{ border-color:var(--rk-groc); color:var(--rk-groc); background:transparent; }
+  .laneHead{ background:var(--st-panel2); color:var(--st-muted); border-radius:5px; }
+  .laneHead select{ background:var(--st-panel); color:var(--st-text); border:1px solid var(--st-line2); }
+  .laneHead button{ background:transparent; color:var(--st-muted); border:1px solid var(--st-line2); }
+  .lane{ background:var(--st-cell); border:1px solid transparent; border-radius:5px; }
+  .lane svg line{ stroke:#E2DDD3; } .lane svg line[stroke-dasharray]{ stroke:#CDC6BA; }
+  .lane .val{ fill:var(--st-muted); }
+  /* transport */
+  .transport{ background:var(--st-panel); border-top:1px solid var(--st-line); box-shadow:none; }
+  .transport .chord{ background:var(--rk-tinta); color:var(--rk-groc); border:none; }
+  .transport .pos{ color:var(--st-text); }
+  .transport .pos span{ color:var(--st-muted) !important; }
+  .transport .beat{ background:var(--st-line2); }
+  .transport .beat.on{ background:var(--rk-groc); }
+  .transport label{ color:var(--st-muted); }
+  .transport input[type=range]{ accent-color:var(--rk-groc); }
+  #btnMixer.on{ background:var(--rk-groc); color:var(--rk-tinta); border-color:transparent; }
+  /* menú i calaix */
+  .menuList{ background:#fff; border:1px solid var(--st-line); box-shadow:0 12px 32px rgba(0,0,0,.14); }
+  .menuList button{ background:transparent; color:var(--st-text); }
+  .menuList button:hover{ background:var(--st-hover); }
+  .menuList button.danger{ background:transparent; border:none; color:#c0392b; }
+  .drawer{ background:var(--st-panel); border-left:1px solid var(--st-line); box-shadow:-12px 0 36px rgba(0,0,0,.14); color:var(--st-text); }
+  .drawerHead h2{ color:var(--st-text); }
+  .drawerHead label{ color:var(--st-muted); }
+  .drawerHead select{ background:var(--st-panel2); color:var(--st-text); border:1px solid var(--st-line2); }
+  .drawerHead .icon{ background:transparent; border:1px solid var(--st-line2); color:var(--st-text); }
+  .drawer .hint{ color:var(--st-muted); }
+  .strip{ background:var(--st-panel2); border:1px solid var(--st-line); border-radius:5px; }
+  .strip.master{ background:#FFF3D1; border-color:#F0D98A; }
+  .strip .nm{ color:var(--st-muted); }
+  .strip .val, .strip .panw{ color:var(--st-muted); }
+  .strip .meter{ background:#E6E1D7; }
+  .strip input.vfader{ accent-color:var(--rk-groc); }
+  .strip select.snd{ background:var(--st-panel); color:var(--st-text); border:1px solid var(--st-line2); border-radius:3px; }
+  .masterIco{ height:44px; display:grid; place-items:center; color:var(--rk-groc); } .masterIco .ico{ width:26px; height:26px; margin:0; }
+  /* modals: clars, com fulls damunt la taula */
+  .modal{ background:rgba(34,31,32,.55); backdrop-filter:blur(2px); }
+  .modalBox{ border-radius:8px; color:var(--rk-tinta); }
+  .modalBox button.ghost{ border-color:var(--rk-linia); color:var(--rk-tinta); }
+  .modalBox button.ghost:hover{ background:var(--rk-suau); }
+  .modalBox button.danger{ border-color:#dc3545; color:#dc3545; }
+  .strip input[type=range]{ accent-color:var(--rk-groc); }
+  .opt{ border-radius:6px; background:#fff; border-color:#ebe7e0; }
+  .opt .im{ background:#f6f4ef; }
+  .opt.special, .opt.design{ display:flex; align-items:center; justify-content:center; gap:4px; color:var(--rk-tinta); }
+  .opt .edit{ border-radius:3px; display:grid; place-items:center; }
+  .opt .edit .ico{ margin:0; width:12px; height:12px; }
+  .optFoot .play{ border-radius:3px; }
+  @media (max-width:900px){ body{ background:var(--st-bg); } }
 </style>
 </head>
 <body>
@@ -305,11 +420,11 @@
       <input type="text" id="progCustom" placeholder="I V vi IV" style="width:170px">
     </label>
     <div class="chips" id="progChips"></div>
-    <button class="icon" id="btnColors" title="Els colors dels acords de la tonalitat">🎨</button>
+    <button class="icon" id="btnColors" title="Els colors dels acords de la tonalitat"><svg class="ico" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6.2" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="5.5" cy="6.5" r="1.2" fill="currentColor"/><circle cx="8.5" cy="4.8" r="1.2" fill="currentColor"/><circle cx="11" cy="7.5" r="1.2" fill="currentColor"/><circle cx="6.5" cy="10.5" r="1.2" fill="currentColor"/></svg></button>
   </div>
   <nav>
     <button class="icon" id="btnHelp" title="Com funciona">?</button>
-    <a href="pissarra.html" title="La pissarra de cartes (versió analògica)">🃏 Pissarra</a>
+    <a href="pissarra.html" title="La pissarra de cartes (versió analògica)"><svg class="ico" viewBox="0 0 16 16"><rect x="2" y="4" width="8" height="10.5" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 2.5h7a1 1 0 0 1 1 1V12" fill="none" stroke="currentColor" stroke-width="1.5"/></svg> Pissarra</a>
   </nav>
 </header>
 
@@ -318,19 +433,19 @@
 <!-- ============ ESCENARI: la graella ocupa tota la pantalla ============ -->
 <main class="stage">
   <div class="toolbar">
-    <button id="btnRandom">🎲 Proposta aleatòria</button>
-    <button id="btnRandomFill" class="ghost" title="Omple només les caselles buides">🎲 Omple els buits</button>
-    <button id="btnAddCol" class="ghost">＋ Part</button>
+    <button id="btnRandom"><svg class="ico" viewBox="0 0 16 16"><rect x="1.5" y="1.5" width="13" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="5" r="1.3" fill="currentColor"/><circle cx="11" cy="5" r="1.3" fill="currentColor"/><circle cx="8" cy="8" r="1.3" fill="currentColor"/><circle cx="5" cy="11" r="1.3" fill="currentColor"/><circle cx="11" cy="11" r="1.3" fill="currentColor"/></svg> Proposta aleatòria</button>
+    <button id="btnRandomFill" class="ghost" title="Omple només les caselles buides"><svg class="ico" viewBox="0 0 16 16"><rect x="1.5" y="1.5" width="13" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="5" r="1.3" fill="currentColor"/><circle cx="11" cy="5" r="1.3" fill="currentColor"/><circle cx="8" cy="8" r="1.3" fill="currentColor"/><circle cx="5" cy="11" r="1.3" fill="currentColor"/><circle cx="11" cy="11" r="1.3" fill="currentColor"/></svg> Omple els buits</button>
+    <button id="btnAddCol" class="ghost"><svg class="ico" viewBox="0 0 16 16"><path d="M8 2v12M2 8h12" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg> Part</button>
     <span class="sp"></span>
     <span id="loadInfo" class="loadinfo"></span>
     <div class="menu" id="fileMenu">
-      <button class="ghost" id="btnFile">💾 Cançó ▾</button>
+      <button class="ghost" id="btnFile"><svg class="ico" viewBox="0 0 16 16"><path d="M3 2.5h7l3 3v8a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1v-10a1 1 0 0 1 1-1z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 9h6M5 12h6" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg> Cançó <span class="caret">▾</span></button>
       <div class="menuList">
-        <button id="btnSave">💾 Guarda (fitxer)</button>
-        <button id="btnLoad">📂 Carrega un fitxer</button>
-        <button id="btnLink">🔗 Copia l'enllaç</button>
-        <button id="btnExport">📸 Descarrega PNG</button>
-        <button id="btnClear" class="danger">🗑️ Buida la graella</button>
+        <button id="btnSave"><svg class="ico" viewBox="0 0 16 16"><path d="M2.5 2.5h9l2 2v9h-11z" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M5 2.5v4h5v-4M5 13.5v-4h6v4" fill="none" stroke="currentColor" stroke-width="1.3"/></svg> Guarda (fitxer)</button>
+        <button id="btnLoad"><svg class="ico" viewBox="0 0 16 16"><path d="M2 4.5h4l1.5 1.5H14v7.5H2z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> Carrega un fitxer</button>
+        <button id="btnLink"><svg class="ico" viewBox="0 0 16 16"><path d="M6.5 9.5l3-3M5 11l-1 1a2.5 2.5 0 0 1-3.5-3.5l2.5-2.5a2.5 2.5 0 0 1 3.5 0M11 5l1-1a2.5 2.5 0 0 1 3.5 3.5l-2.5 2.5a2.5 2.5 0 0 1-3.5 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Copia l'enllaç</button>
+        <button id="btnExport"><svg class="ico" viewBox="0 0 16 16"><rect x="2" y="3" width="12" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 12l3.5-4 2.5 3 2-2 2.5 3" fill="none" stroke="currentColor" stroke-width="1.3" stroke-linejoin="round"/><circle cx="10.5" cy="6" r="1.1" fill="currentColor"/></svg> Descarrega PNG</button>
+        <button id="btnClear" class="danger"><svg class="ico" viewBox="0 0 16 16"><path d="M3 4.5h10M6.5 4.5v-2h3v2M4 4.5l.7 9h6.6l.7-9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> Buida la graella</button>
       </div>
     </div>
     <input type="file" id="fileLoad" accept="application/json" style="display:none">
@@ -359,7 +474,7 @@
   <span class="sp"></span>
   <label><input type="checkbox" id="loop" checked> En bucle</label>
   <label>Volum <input type="range" id="vol" min="0" max="100" value="80" style="width:100px"></label>
-  <button class="ghost" id="btnMixer" title="Obre el mesclador">🎚 Mesclador</button>
+  <button class="ghost" id="btnMixer" title="Obre el mesclador"><svg class="ico" viewBox="0 0 16 16"><path d="M4 2v12M8 2v12M12 2v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="2.2" y="8" width="3.6" height="2.6" rx=".8" fill="currentColor"/><rect x="6.2" y="4" width="3.6" height="2.6" rx=".8" fill="currentColor"/><rect x="10.2" y="9.5" width="3.6" height="2.6" rx=".8" fill="currentColor"/></svg> Mesclador</button>
 </div>
 
 <!-- ============ MODAL AJUDA ============ -->
@@ -367,10 +482,10 @@
   <div class="modalBox" style="width:min(760px,100%)">
     <h3>Com funciona el taller de creació</h3>
     <div class="help">
-      <p><b>El marc.</b> A la barra de dalt tries la <b>mètrica</b>, el <b>tempo</b>, la <b>tonalitat</b> i la <b>roda d'acords</b>. Cada <b>columna</b> de la graella és una volta sencera d'aquesta roda (un compàs per acord). La mètrica tria quines cartes es poden fer servir: 4/4 les binàries i els rascats; 3/4, 6/8, 9/8 i 12/8 les ternàries de cada tipus. El tempo és sempre el del pols (negra, o negra amb punt en 6/8, 9/8 i 12/8). El 🎨 mostra els colors dels acords de la tonalitat (sistema Hooktheory).</p>
+      <p><b>El marc.</b> A la barra de dalt tries la <b>mètrica</b>, el <b>tempo</b>, la <b>tonalitat</b> i la <b>roda d'acords</b>. Cada <b>columna</b> de la graella és una volta sencera d'aquesta roda (un compàs per acord). La mètrica tria quines cartes es poden fer servir: 4/4 les binàries i els rascats; 3/4, 6/8, 9/8 i 12/8 les ternàries de cada tipus. El tempo és sempre el del pols (negra, o negra amb punt en 6/8, 9/8 i 12/8). El botó de la paleta mostra els colors dels acords de la tonalitat (sistema Hooktheory).</p>
       <p><b>L'estructura.</b> Clica una casella per triar la carta (o deixar-la en silenci); cada carta té un ▶ per escoltar-la. Clica el nom d'una part per canviar-lo, el <b>×N</b> per repetir la roda i els <b>acords</b> per donar a aquesta part una roda diferent. Teclat, guitarra i baix poden tocar un <b>patró rítmic</b> (l'acord sencer) o un <b>contorn melòdic</b> (arpegi amb notes de l'acord). El <b>▶</b> de cada part hi salta mentre sona (o tecles 1–9). Clica la carta d'un instrument per sentir-lo sol; <b>M</b> silencia una pista i <b>S</b> la deixa en solo.</p>
-      <p><b>Cartes pròpies.</b> Dins de cada casella pots <b>✎ dissenyar la teva carta</b> (ritme, contorn o patró de bateria) o fer-ne una còpia editada d'una d'existent: queda desada al navegador per a totes les cançons.</p>
-      <p><b>Expressivitat.</b> La fila 🎚 és una línia de volum per pista: clica per posar-hi punts, arrossega'ls per fer crescendos i decrescendos, doble clic per treure'n un.</p>
+      <p><b>Cartes pròpies.</b> Dins de cada casella pots <b>dissenyar la teva carta</b> (ritme, contorn o patró de bateria) o fer-ne una còpia editada d'una d'existent: queda desada al navegador per a totes les cançons.</p>
+      <p><b>Expressivitat.</b> La fila <b>Expressivitat</b> és una línia de volum per pista: clica per posar-hi punts, arrossega'ls per fer crescendos i decrescendos, doble clic per treure'n un.</p>
       <p><b>Mesclador.</b> Volum, panorama, mute i solo de cada pista i el so de la guitarra (acústica, neta, crunch, distorsió) i del teclat (piano elèctric o piano). Els sons són mostres gravades d'instruments reals; si no es poden carregar, sona una versió sintetitzada.</p>
       <p><b>Dreceres.</b> <kbd>Espai</kbd> reprodueix/atura · <kbd>1</kbd>–<kbd>9</kbd> salta a una part · <kbd>Esc</kbd> tanca.</p>
       <p class="credits">Creació © ROCKIN.CAT, SCCL · Llicència <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.ca" target="_blank">CC BY-NC-SA 4.0</a> · Sons: soundfonts FluidR3 i MusyngKite (llicència MIT).</p>
@@ -401,7 +516,7 @@
         <label id="dsSubWrap">Subdivisió<span class="seg" id="dsSubSeg"><button data-v="2">Corxeres</button><button data-v="4" class="on">Semicorxeres</button></span></label>
         <span style="flex:1"></span>
         <button class="ghost" id="dsClear" style="font-size:12px">Buida</button>
-        <button class="ghost" id="dsPlay" style="font-size:12px">▶ Prova-la</button>
+        <button class="ghost" id="dsPlay" style="font-size:12px"><svg class="ico" viewBox="0 0 16 16"><path d="M4 2.5v11l9-5.5z" fill="currentColor"/></svg> Prova-la</button>
       </div>
       <div class="dsGrid" id="dsGrid"></div>
       <div style="display:flex; gap:16px; align-items:flex-start; flex-wrap:wrap">
@@ -409,7 +524,7 @@
         <p class="dsHelp" id="dsHelp"></p>
       </div>
     </div>
-    <div class="foot"><button class="danger" id="dsDel" style="margin-right:auto; display:none">🗑️ Elimina la carta</button><button class="ghost" data-close>Cancel·la</button><button id="dsOk">Desa i posa-la aquí</button></div>
+    <div class="foot"><button class="danger" id="dsDel" style="margin-right:auto; display:none"><svg class="ico" viewBox="0 0 16 16"><path d="M3 4.5h10M6.5 4.5v-2h3v2M4 4.5l.7 9h6.6l.7-9" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> Elimina la carta</button><button class="ghost" data-close>Cancel·la</button><button id="dsOk">Desa i posa-la aquí</button></div>
   </div>
 </div>
 
@@ -483,7 +598,7 @@ const FUNCIONS = [ {nom:"Tònica", text:"casa: repòs", idx:[0,5,2]}, {nom:"Pred
 function keyStripHTML(){
   const chords = keyChords(); const byIdx = {}; chords.forEach(c=>{ byIdx[MAJOR.indexOf(((c.root - (isMinorKey()?(keyRoot(song.key)+3)%12:keyRoot(song.key)))+12)%12)] = c; });
   const keyName = catName((FLAT_KEYS.has(song.key)?NOTE_FLAT:NOTE_SHARP)[keyRoot(song.key)]) + (isMinorKey()?" menor":" major");
-  return `<summary class="keystrip-head"><strong>🎨 Els colors dels acords · tonalitat de ${keyName}</strong><span class="keystrip-mini">${chords.map(c=>`<i style="background:${chordColor(c)}" title="${catName(c.name)}"></i>`).join("")}</span></summary>
+  return `<summary class="keystrip-head"><strong>Els colors dels acords · tonalitat de ${keyName}</strong><span class="keystrip-mini">${chords.map(c=>`<i style="background:${chordColor(c)}" title="${catName(c.name)}"></i>`).join("")}</span></summary>
     <p class="hint" style="margin:6px 0 10px">Cada acord té el color del seu grau, com al llibre: el mateix color vol dir la mateixa funció, en qualsevol cançó. El número romà és el grau (majúscula = acord major, minúscula = menor).</p>
     <div class="funcions">${FUNCIONS.map(f=>`<div class="funcio"><b>${f.nom}</b><small>${f.text}</small><div class="chips">${f.idx.map(i=>byIdx[i]).filter(Boolean).map(c=>chordChipHTML(c)).join("")}</div></div>`).join("")}</div>
     <p class="hint" style="margin-top:8px">Els acords de fora de la tonalitat (per exemple el <b>♭VII</b>) són <span style="background:${HT_OUT};padding:0 6px;border-radius:4px;color:#1d1d1f">rosa clar</span>.</p>`;
@@ -1169,7 +1284,7 @@ function renderGrid(){
   const g = $("grid"); g.innerHTML="";
   g.style.gridTemplateRows = `78px repeat(${ROWS.length}, var(--cell-h)) var(--lane-h)`;
   // capçaleres de fila
-  const c0 = document.createElement("div"); c0.className="corner"; c0.textContent="instrument ↓ / part →"; g.appendChild(c0);
+  const c0 = document.createElement("div"); c0.className="corner"; c0.innerHTML='<span>parts</span>'; g.appendChild(c0);
   ROWS.forEach(row=>{
     const h = document.createElement("div"); h.className="rowHead"+(!row.nomesVisual && rowSilent(row.id)?" silent":"")+(row.nomesVisual?" veu":"");
     h.innerHTML = `<img src="${row.img}" alt="${row.nom}" title="${row.nom}${row.nomesVisual?' (no sona a l\'app)':' · clica per sentir com sona'}">${row.nomesVisual?'<div class="nm">no sona</div>':''}`;
@@ -1199,7 +1314,7 @@ function renderGrid(){
       <div class="bars">${chords.map(c=>`<div class="bar" style="background:${chordColor(c)}"></div>`).join("")}</div>
       <button class="jump" title="Salta a aquesta part (tecla ${ci+1})">▶</button>
       <div class="tools">
-        <button title="Atzar en aquesta columna" data-act="dice">🎲</button>
+        <button title="Atzar en aquesta columna" data-act="dice"><svg class="ico" viewBox="0 0 16 16"><rect x="1.5" y="1.5" width="13" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="5" r="1.3" fill="currentColor"/><circle cx="11" cy="5" r="1.3" fill="currentColor"/><circle cx="8" cy="8" r="1.3" fill="currentColor"/><circle cx="5" cy="11" r="1.3" fill="currentColor"/><circle cx="11" cy="11" r="1.3" fill="currentColor"/></svg></button>
         <button title="Duplica" data-act="dup">⧉</button>
         <button title="Mou a l'esquerra" data-act="left">‹</button>
         <button title="Mou a la dreta" data-act="right">›</button>
@@ -1290,7 +1405,7 @@ function renderMixer(){
     st.dataset.row=row.id; box.appendChild(st);
   });
   const ms=document.createElement("div"); ms.className="strip master";
-  ms.innerHTML=`<div style="height:44px;display:grid;place-items:center;font-size:28px">🎚️</div><div class="nm">Màster</div>
+  ms.innerHTML=`<div class="masterIco"><svg class="ico" viewBox="0 0 16 16"><path d="M4 2v12M8 2v12M12 2v12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><rect x="2.2" y="8" width="3.6" height="2.6" rx=".8" fill="currentColor"/><rect x="6.2" y="4" width="3.6" height="2.6" rx=".8" fill="currentColor"/><rect x="10.2" y="9.5" width="3.6" height="2.6" rx=".8" fill="currentColor"/></svg></div><div class="nm">Màster</div>
     <div class="fad"><input class="vfader" type="range" min="0" max="100" value="${song.mix.master.vol}" title="Volum general"><div class="meter"><i></i></div></div>
     <div class="val">${song.mix.master.vol}</div>`;
   const mf=ms.querySelector(".vfader"), mv=ms.querySelector(".val");
@@ -1418,16 +1533,16 @@ function openCardModal(col,row){
   const addGroup = (title)=>{ const h=document.createElement("h4"); h.textContent=title; gal.appendChild(h); };
   const addCards = (cards, kind)=> cards.forEach(card=>{
     const o = document.createElement("div"); o.className="opt"+(card.id===cur?" sel":"")+(kind?" "+kind:"")+(card.propia&&card.tipus!=="bateria"?" propia-ritme":""); o._card=card;
-    const lbl = card.propia ? `✎ ${card.nom||"Carta pròpia"}` : row.id==="bateria" ? `<b>${card.num}</b>${card.title?' · '+card.title:''}` : "";
+    const lbl = card.propia ? `${card.nom||"Carta pròpia"}` : row.id==="bateria" ? `<b>${card.num}</b>${card.title?' · '+card.title:''}` : "";
     o.innerHTML = `<div class="im">${cardImgHTML(card,row)}</div><div class="optFoot"><span>${lbl}</span>${row.nomesVisual?"":'<button class="play" title="Escolta aquesta carta">▶</button>'}</div>`;
     o.onclick=()=>{ col.cells[row.id]=card.id; closeModals(); changed(); };
     const pb = o.querySelector(".play"); if(pb) pb.onclick = ev=>{ ev.stopPropagation(); previewCard(row, card, col); };
-    if(!row.nomesVisual && !isStrum(card)){ const e=document.createElement("button"); e.className="edit"; e.textContent="✎"; e.title=card.propia?"Edita aquesta carta":"Fes-ne una còpia i edita-la"; e.onclick=ev=>{ ev.stopPropagation(); openDesigner(col,row,card.propia?card:toEditable(card,row)); }; o.appendChild(e); }
+    if(!row.nomesVisual && !isStrum(card)){ const e=document.createElement("button"); e.className="edit"; e.innerHTML='<svg class="ico" viewBox="0 0 16 16"><path d="M3 13l1-3.5 7-7 2.5 2.5-7 7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>'; e.title=card.propia?"Edita aquesta carta":"Fes-ne una còpia i edita-la"; e.onclick=ev=>{ ev.stopPropagation(); openDesigner(col,row,card.propia?card:toEditable(card,row)); }; o.appendChild(e); }
     gal.appendChild(o);
   });
-  const none = document.createElement("div"); none.className="opt special"+(!cur?" sel":""); none.textContent="🔇 Silenci (no toca)"; none.onclick=()=>{ delete col.cells[row.id]; closeModals(); changed(); }; gal.appendChild(none);
-  const dice = document.createElement("div"); dice.className="opt special"; dice.textContent="🎲 A l'atzar"; dice.onclick=()=>{ col.cells[row.id]=randomCard(row); closeModals(); changed(); }; gal.appendChild(dice);
-  if(!row.nomesVisual){ const ds = document.createElement("div"); ds.className="opt design"; ds.innerHTML="✎ Dissenya la teva carta<small style='font-weight:400;color:var(--muted);margin-top:4px'>ritme"+(row.baralla==="ritme"?" o contorn":"")+" a la teva manera</small>"; ds.onclick=()=>openDesigner(col,row,null); gal.appendChild(ds); }
+  const none = document.createElement("div"); none.className="opt special"+(!cur?" sel":""); none.innerHTML='<svg class="ico" viewBox="0 0 16 16"><path d="M2.5 6v4h3l3.5 3V3L5.5 6z" fill="currentColor"/><path d="M11 6l3 4M14 6l-3 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg> Silenci (no toca)'; none.onclick=()=>{ delete col.cells[row.id]; closeModals(); changed(); }; gal.appendChild(none);
+  const dice = document.createElement("div"); dice.className="opt special"; dice.innerHTML='<svg class="ico" viewBox="0 0 16 16"><rect x="1.5" y="1.5" width="13" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="1.5"/><circle cx="5" cy="5" r="1.3" fill="currentColor"/><circle cx="11" cy="5" r="1.3" fill="currentColor"/><circle cx="8" cy="8" r="1.3" fill="currentColor"/><circle cx="5" cy="11" r="1.3" fill="currentColor"/><circle cx="11" cy="11" r="1.3" fill="currentColor"/></svg> A l\'atzar'; dice.onclick=()=>{ col.cells[row.id]=randomCard(row); closeModals(); changed(); }; gal.appendChild(dice);
+  if(!row.nomesVisual){ const ds = document.createElement("div"); ds.className="opt design"; ds.innerHTML='<svg class="ico" viewBox="0 0 16 16"><path d="M3 13l1-3.5 7-7 2.5 2.5-7 7z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg> Dissenya la teva carta<small style="font-weight:400;color:var(--muted);margin-top:4px">ritme'+(row.baralla==="ritme"?" o contorn":"")+' a la teva manera</small>'; ds.onclick=()=>openDesigner(col,row,null); gal.appendChild(ds); }
   const own = customFor(row); if(own.length){ addGroup("Les teves cartes · dissenyades per vosaltres"); addCards(own, "propia"); }
   if(row.baralla==="ritme"){
     if(row.id==="guitarra" && song.metrica==="binari"){ addGroup("Rascat de guitarra · fletxa negra = toca, grisa = moviment sense tocar"); addCards(D.RASCATS, "rascat"); }
@@ -1696,7 +1811,7 @@ function dsSave(){
    EXPRESSIVITAT: línia de volum per pista (automatització)
    ============================================================ */
 const AUTO_DEF = 0.7;                                  // alçada de la línia que equival a volum normal (0 dB)
-const AUTO_TRACKS = [["master","Màster","#221F20"],["bateria","Bateria","#f4a261"],["teclat","Teclat","#79cf5a"],["baix","Baix","#3fb4ff"],["guitarra","Guitarra","#e63946"]];
+const AUTO_TRACKS = [["master","Màster","#FDBE10"],["bateria","Bateria","#f4a261"],["teclat","Teclat","#79cf5a"],["baix","Baix","#3fb4ff"],["guitarra","Guitarra","#e63946"]];
 let autoTrack = "master";
 const autoGain = v => Math.pow(Math.max(0,v)/AUTO_DEF, 2);
 const autoDb = v => v<=0 ? "−∞" : (20*Math.log10(autoGain(v))).toFixed(1).replace("-","−")+" dB";
@@ -1722,7 +1837,7 @@ function scheduleAuto(ev, t0){
 }
 function laneHeadEl(){
   const h = document.createElement("div"); h.className="laneHead";
-  h.innerHTML = `<span>🎚 Expressivitat</span><select title="Pista de la línia de volum">${AUTO_TRACKS.map(([id,n,c])=>`<option value="${id}" ${id===autoTrack?"selected":""}>${n}</option>`).join("")}</select><button title="Treu tots els punts d'aquesta pista">Treu la línia</button>`;
+  h.innerHTML = `<span>Expressivitat</span><select title="Pista de la línia de volum">${AUTO_TRACKS.map(([id,n,c])=>`<option value="${id}" ${id===autoTrack?"selected":""}>${n}</option>`).join("")}</select><button title="Treu tots els punts d'aquesta pista">Treu la línia</button>`;
   h.querySelector("select").onchange = e=>{ autoTrack=e.target.value; renderGrid(); };
   h.querySelector("button").onclick = ()=>{ song.cols.forEach(c=>{ if(c.auto) delete c.auto[autoTrack]; }); changed(); };
   return h;
