@@ -40,7 +40,7 @@
   .compact .rowHead, .compact .corner, .compact .laneHead{ width:96px; }
   .compact .laneHead select{ width:84px; }
   .compact .cell .lbl{ display:none; }
-  @media (max-width:1400px){ .topbar .brand img{ height:36px; } .topbar .brand span{ display:none; } .topbar{ gap:12px; padding:6px 14px; } .setbar{ gap:10px; } .setbar input[type=range]{ width:90px; } }
+  @media (max-width:1400px){ .topbar .brand img{ height:36px; } .topbar .rk-sep, .topbar .rk-eina{ display:none; } .topbar{ gap:12px; padding:6px 14px; } .setbar{ gap:10px; } .setbar input[type=range]{ width:90px; } }
   .topbar nav{ margin-left:auto; }
   button.icon{ width:34px; height:34px; padding:0; border-radius:50%; font-size:15px; display:grid; place-items:center; }
   .topbar nav button.icon{ background:var(--rk-tinta); color:var(--rk-groc); }
@@ -392,11 +392,16 @@
   .optFoot .play{ border-radius:3px; }
   @media (max-width:900px){ body{ background:var(--st-bg); } }
 </style>
+<link rel="stylesheet" href="/marca/capcalera.css">
 </head>
 <body>
 
-<header class="topbar">
-  <a class="brand" href="https://rockin.cat" target="_blank" rel="noopener"><img src="https://rockin.cat/wp-content/uploads/2022/07/rockin-logo.svg" alt="Rockin" onerror="this.onerror=null;this.src='marca/rockin-logo-fosc.png'"><span>Creació</span></a>
+<header class="topbar rk-cap rk-alta rk-amb-controls">
+  <div class="rk-marca">
+    <a class="rk-totes" href="/" title="Totes les eines Rockin"><img class="rk-logo" src="/marca/rockin-logo-fosc.png" alt="Rockin" width="382" height="72"></a>
+    <span class="rk-sep" aria-hidden="true"></span>
+    <span class="rk-eina">Taller de creació</span>
+  </div>
   <div class="setbar">
     <label class="f">Mètrica
       <span class="seg" id="metrica">

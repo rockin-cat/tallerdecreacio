@@ -415,12 +415,13 @@
   
   .carta-opcio.seleccionat { border-color: #28a745; background: #e8f5e9; }
 </style>
+<link rel="stylesheet" href="/marca/capcalera.css">
 </head>
 
 <body>
 
 <style>
-  body{ padding-top:84px; }
+  body{ padding-top:72px; }
   .topbar{ position:fixed; top:0; left:0; right:0; height:68px; z-index:1500; background:var(--rk-groc); color:var(--rk-tinta); display:flex; align-items:center; gap:16px; padding:0 20px; }
   .topbar .brand{ display:flex; align-items:center; gap:14px; text-decoration:none; color:inherit; }
   .topbar .brand img{ height:44px; width:auto; display:block; }
@@ -438,9 +439,13 @@
   .footer-license a{ color:#1f6a58 !important; }
   .cardStage, .boardViewport{ border-radius:4px !important; }
 </style>
-<header class="topbar">
-  <a class="brand" href="https://rockin.cat" target="_blank" rel="noopener"><img src="https://rockin.cat/wp-content/uploads/2022/07/rockin-logo.svg" alt="Rockin" onerror="this.onerror=null;this.src='marca/rockin-logo-fosc.png'"><span>Cartes Rockin</span></a>
-  <nav><a href="index.html">🎼 Creació: compon i escolta →</a></nav>
+<header class="topbar rk-cap">
+  <div class="rk-marca">
+    <a class="rk-totes" href="/" title="Totes les eines Rockin"><img class="rk-logo" src="/marca/rockin-logo-fosc.png" alt="Rockin" width="382" height="72"></a>
+    <span class="rk-sep" aria-hidden="true"></span>
+    <span class="rk-eina">Cartes Rockin</span>
+  </div>
+  <nav><a href="index.html">Creació: compon i escolta →</a></nav>
 </header>
 
 <div class="layout">
@@ -448,12 +453,12 @@
   <div class="left">
     <div class="controls">
       <select id="deck"></select>
-      <button id="btnNew" type="button" title="Tria carta a l'atzar">🎲 Atzar</button>
-      <button id="btnPick" type="button" class="btn-pick" title="Tria carta manualment">🔍 Escull</button>
+      <button id="btnNew" type="button" title="Tria carta a l'atzar">Atzar</button>
+      <button id="btnPick" type="button" class="btn-pick" title="Tria carta manualment">Escull</button>
     </div>
     
     <div style="margin-bottom:10px;">
-        <button id="btnClear" type="button" style="width:100%; background: #dc3545; color:white;">🗑️ Neteja pissarra</button>
+        <button id="btnClear" type="button" style="width:100%; background: #dc3545; color:white;">Neteja pissarra</button>
     </div>
 
     <div class="cardStage" id="cardStage">
@@ -483,7 +488,7 @@
           <button class="zoomBtn" id="zoomIn" type="button">+</button>
         </div>
 
-        <button class="zoomBtn" id="btnExport" type="button">📸 Descarrega</button>
+        <button class="zoomBtn" id="btnExport" type="button">Descarrega</button>
       </div>
 
       <div style="font-size:12px;opacity:.65;">scroll X/Y</div>
@@ -532,7 +537,7 @@
 
 <div id="modalCartes" class="modal-overlay" onclick="tancarSiFora(event, 'modalCartes')">
     <div class="modal-contingut">
-        <h2 style="margin-top:0;">🔍 Tria una carta</h2>
+        <h2 style="margin-top:0;">Tria una carta</h2>
         <p style="font-size: 14px; color: #666; margin-top: -10px;">Fes clic a la carta que vulguis utilitzar per posar-la a l'aparador.</p>
         <div class="modal-graella" id="galeria-cartes"></div>
         <button onclick="tancarModal('modalCartes')" style="margin-top:30px; background:#666; color:white; padding:10px 20px; border:none; border-radius:8px; font-weight:bold; cursor:pointer;">Tancar finestra</button>
